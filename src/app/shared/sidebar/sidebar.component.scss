@@ -154,6 +154,10 @@
   width: 100%;
   padding: 1rem;
 
+  @media (max-width: 768px) {
+    bottom: 10%;
+  }
+
   nav {
     background: var(--blue-800);
     border-radius: 0.5rem;
