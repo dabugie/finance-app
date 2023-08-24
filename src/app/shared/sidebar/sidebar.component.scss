@@ -1,0 +1,184 @@
+.sidenav {
+  background: var(--blue-700);
+  transition: all 0.2s ease;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  width: 16rem;
+  height: 100vh;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1rem 1rem 1rem;
+    width: 100%;
+
+    .logo {
+      background: #fff;
+      text-align: center;
+      width: 3rem;
+      min-width: 3rem;
+      border-radius: 0.3rem;
+      padding: 0.313rem;
+      font-size: 24px;
+      font-weight: 900;
+      cursor: pointer;
+      border: none;
+    }
+
+    .logo-text {
+      margin-left: 1.5rem;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-close {
+      margin-left: auto;
+      cursor: pointer;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background-color: transparent;
+      border: none;
+      .fa-xmark {
+        color: #fff;
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+.sidenav-collapsed {
+  width: 5rem;
+
+  ::ng-deep {
+    .custom-context-menu {
+      div {
+        left: 1rem !important;
+        top: 46rem !important;
+        width: 3rem;
+
+        @media (max-width: 768px) {
+          top: 40rem !important;
+        }
+      }
+
+      .p-contextmenu
+        .p-element
+        .p-contextmenu-root-list
+        .p-menuitem
+        .p-menuitem-content
+        .p-element {
+        .p-menuitem-text {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.sidenav-nav {
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100% - 3.65rem);
+  cursor: pointer;
+
+  .sidenav-nav-item {
+    width: 100%;
+    margin-bottom: 0.625rem;
+
+    .sidenav-nav-link {
+      display: flex;
+      align-items: center;
+      height: 3rem;
+      color: #f3f3f3;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-radius: 0.5rem;
+
+      .sidenav-link-icon {
+        font-size: 22px;
+        width: 2rem;
+        min-width: 2rem;
+        margin: 0 0.5rem;
+        text-align: center;
+      }
+
+      .sidenav-link-text {
+        margin-left: 1.5rem;
+      }
+    }
+  }
+
+  .sidenav-nav-item:hover {
+    .sidenav-nav-link {
+      background-color: #fff;
+      color: #000;
+    }
+  }
+
+  .sidenav-nav-item:last-child::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background-color: #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .sidenav-nav-item:last-child {
+    margin-top: auto;
+  }
+}
+
+.active {
+  background-color: #fff;
+
+  .sidenav-link-icon,
+  .sidenav-link-text {
+    color: #000;
+  }
+}
+
+:host ::ng-deep .custom-context-menu {
+  div {
+    left: 1rem !important;
+    top: 46rem !important;
+    z-index: 1001;
+    width: 14rem;
+
+
+    @media (max-width: 768px) {
+      top: 40rem !important;
+    }
+  }
+
+  .p-contextmenu {
+    background: var(--blue-800);
+
+    .p-element .p-contextmenu-root-list .p-menuitem {
+      .p-menuitem-content {
+        .p-element {
+          span {
+            color: #fff;
+          }
+        }
+      }
+
+      .p-menuitem-content:hover {
+        background: #fff;
+        color: #000;
+        .p-element {
+          span {
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+}

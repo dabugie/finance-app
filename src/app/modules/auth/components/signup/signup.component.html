@@ -1,0 +1,80 @@
+<!-- <div class="grid">
+    <div class="flex flex-wrap align-items-center justify-content-center w-screen h-screen">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-header">
+                    <h2>Let's get started!</h2>
+                    <p>Please confirm your email to continue</p>
+                </div>
+                <div class="card-form">
+                    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Enter your name"
+                                formControlName="name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Enter your email address"
+                                formControlName="email" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Enter your password"
+                                formControlName="password" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" [disabled]="signupForm.invalid" *ngIf="!loading">
+                                Sign up
+                            </button>
+                            <button type="button" [disabled]="true" *ngIf="loading">
+                                <i class="fa fa-spin fa-sync"></i> Signing up...
+                            </button>
+                        </div>
+                        <hr />
+                        <div class="links">
+                            Already have an account? <a routerLink="/auth/login">Log in</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+<div class="grid">
+    <div class="card">
+        <div class="card-content">
+            <div class="card-header">
+                <h2>Let's get started!</h2>
+                <span>Please confirm your email to continue</span>
+            </div>
+            <div class="card-form">
+                <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter your name" formControlName="name" />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Enter your email address"
+                            formControlName="email" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Enter your password"
+                            formControlName="password" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" [disabled]="signupForm.invalid" *ngIf="!loading">
+                            Sign up
+                        </button>
+                        <button type="button" [disabled]="true" *ngIf="loading">
+                            <i class="fa fa-spin fa-sync"></i> Signing up...
+                        </button>
+                    </div>
+                </form>
+                <hr />
+                <div class="links">
+                    Already have an account? <a routerLink="/auth/login">Log in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

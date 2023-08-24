@@ -1,0 +1,6 @@
+<div class="dashboard">
+    <div class="dashboard-content">
+        <app-sidebar (onToggleSidenav)="onToggleSideNav($event)"></app-sidebar>
+        <app-main-content [isCollapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-main-content>
+    </div>
+</div>

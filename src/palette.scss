@@ -1,0 +1,86 @@
+$white: (
+  100: #fefefe,
+  200: #fefefe,
+  300: #fdfdfd,
+  400: #fdfdfd,
+  500: #fcfcfc,
+  600: #cacaca,
+  700: #979797,
+  800: #656565,
+  900: #323232,
+);
+
+$black: (
+  100: #d0d0d0,
+  200: #a1a1a1,
+  300: #717171,
+  400: #424242,
+  500: #131313,
+  600: #0f0f0f,
+  700: #0b0b0b,
+  800: #080808,
+  900: #040404,
+);
+
+$blue: (
+  100: #cfd4dd,
+  200: #9fa9bb,
+  300: #6e7f98,
+  400: #3e5476,
+  500: #0e2954,
+  600: #0b2143,
+  700: #081932,
+  800: #061022,
+  900: #030811,
+);
+
+$indigo: (
+  100: #dfdede,
+  200: #bebdbd,
+  300: #9e9d9d,
+  400: #7d7c7c,
+  500: #5d5b5b,
+  600: #4a4949,
+  700: #383737,
+  800: #252424,
+  900: #131212,
+);
+
+:root {
+  --white-100: #{map-get($white, 100)};
+  --white-200: #{map-get($white, 200)};
+  --white-300: #{map-get($white, 300)};
+  --white-400: #{map-get($white, 400)};
+  --white-500: #{map-get($white, 500)};
+  --white-600: #{map-get($white, 600)};
+  --white-700: #{map-get($white, 700)};
+  --white-800: #{map-get($white, 800)};
+  --white-900: #{map-get($white, 900)};
+  --black-100: #{map-get($black, 100)};
+  --black-200: #{map-get($black, 200)};
+  --black-300: #{map-get($black, 300)};
+  --black-400: #{map-get($black, 400)};
+  --black-500: #{map-get($black, 500)};
+  --black-600: #{map-get($black, 600)};
+  --black-700: #{map-get($black, 700)};
+  --black-800: #{map-get($black, 800)};
+  --black-900: #{map-get($black, 900)};
+  --blue-100: #{map-get($blue, 100)};
+  --blue-200: #{map-get($blue, 200)};
+  --blue-300: #{map-get($blue, 300)};
+  --blue-400: #{map-get($blue, 400)};
+  --blue-500: #{map-get($blue, 500)};
+  --blue-600: #{map-get($blue, 600)};
+  --blue-700: #{map-get($blue, 700)};
+  --blue-800: #{map-get($blue, 800)};
+  --blue-900: #{map-get($blue, 900)};
+  --indigo-100: #{map-get($indigo, 100)};
+  --indigo-200: #{map-get($indigo, 200)};
+  --indigo-300: #{map-get($indigo, 300)};
+  --indigo-400: #{map-get($indigo, 400)};
+  --indigo-500: #{map-get($indigo, 500)};
+  --indigo-600: #{map-get($indigo, 600)};
+  --indigo-700: #{map-get($indigo, 700)};
+  --indigo-800: #{map-get($indigo, 800)};
+  --indigo-900: #{map-get($indigo, 900)};
+}
