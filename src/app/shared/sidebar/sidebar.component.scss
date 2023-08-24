@@ -5,7 +5,7 @@
   z-index: 1;
   top: 0;
   width: 16rem;
-  height: 100vh;
+  height: calc(100vh - env(safe-area-inset-bottom));
 
   .logo-container {
     display: flex;
