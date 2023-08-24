@@ -22,6 +22,17 @@
             </ng-template>
         </li>
     </ul>
-    <p-contextMenu #cm [model]="contextMenuData" [appendTo]="sidenav" class="custom-context-menu"
-        [ngClass]="isCollapsed ? 'sidenav-collapsed' : ''"></p-contextMenu>
+    <!-- <p-contextMenu #cm [model]="contextMenuData" [appendTo]="sidenav" class="custom-context-menu"
+        [ngClass]="isCollapsed ? 'sidenav-collapsed' : ''"></p-contextMenu> -->
+
+    <div class="custom-context-menu" *ngIf="isContextMenuOpen">
+        <nav>
+            <a *ngFor="let items of contextMenuData" class="context-menu-link">
+                <i class="sidenav-link-icon" [class]="items.icon"></i>
+                <span class="sidenav-link-text" *ngIf="!isCollapsed">{{items.label}}</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- <div><h1>Hola</h1></div> -->
 </div>

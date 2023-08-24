@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  @ViewChild('cm') cm!: ContextMenu;
+  // @ViewChild('cm') cm!: ContextMenu;
   @ViewChild('sidenav') sidenav!: ElementRef;
 
   @Output() onToggleSidenav: EventEmitter<SidebarToggle> = new EventEmitter();
@@ -40,7 +40,7 @@ export class SidebarComponent implements OnInit {
 
   isContextMenuOpen: boolean = false;
 
-  isCollapsed: boolean = true;
+  isCollapsed: boolean = false;
   screenWidth: number = 0;
 
   sidebarData: SidebarItem[] = [
@@ -96,14 +96,18 @@ export class SidebarComponent implements OnInit {
   }
 
   showContextMenu(event: MouseEvent) {
-    event.preventDefault();
+    // event.preventDefault();
 
-    if (this.isContextMenuOpen) {
-      this.cm.hide(); // Cierra el menú contextual
-    } else {
-      this.cm.show(event);
-    }
+    // if (this.isContextMenuOpen) {
+    //   this.cm.hide(); // Cierra el menú contextual
+    // } else {
+    //   this.cm.show(event);
+    // }
+
+
     this.isContextMenuOpen = !this.isContextMenuOpen;
+    
+    console.log({ event, isContextMenuOpen: this.isContextMenuOpen });
   }
 
   toggleCollapse() {
