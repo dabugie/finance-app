@@ -1,7 +1,8 @@
 export interface SidebarItem {
     label: string;
     icon: string;
-    route: string;
+    route?: string;
+    onClick?: (event: any) => void;
     children?: SidebarItem[];
 }
 

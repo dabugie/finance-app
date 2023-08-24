@@ -66,48 +66,36 @@ export class SidebarComponent implements OnInit {
     },
   ];
 
-  contextMenuData: MenuItem[] = [];
+  contextMenuData: SidebarItem[] = [];
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-
     this.contextMenuData.push(
       {
         label: 'Profile',
         icon: 'fa-solid fa-user',
-        command: () => {
-          this.isContextMenuOpen = !this.isContextMenuOpen;
-
-        },
+        route: 'profile',
       },
       {
         label: 'Logout',
         icon: 'fa-solid fa-sign-out',
-        command: () => {
-          this.authService.logoutUser().then(() => {
-            this.router.navigate(['/auth']);
-          });
-          this.isContextMenuOpen = !this.isContextMenuOpen;
+        onClick: (event: any) => {
+          this.authService.logoutUser();
+          this.router.navigate(['/login']);
         },
-      },
+      }
     );
-
   }
 
-  showContextMenu(event: MouseEvent) {
-    // event.preventDefault();
+  logout() {
+    this.authService.logoutUser().then(() => {
+      this.router.navigate(['/auth']);
+    });
+  }
 
-    // if (this.isContextMenuOpen) {
-    //   this.cm.hide(); // Cierra el menú contextual
-    // } else {
-    //   this.cm.show(event);
-    // }
-
-
+  showContextMenu() {
     this.isContextMenuOpen = !this.isContextMenuOpen;
-    
-    console.log({ event, isContextMenuOpen: this.isContextMenuOpen });
   }
 
   toggleCollapse() {

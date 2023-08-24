@@ -9,7 +9,7 @@
     <ul class="sidenav-nav">
         <li class="sidenav-nav-item" *ngFor="let data of sidebarData; last as isLast">
             <ng-container *ngIf="isLast; else notLastItem">
-                <a class="sidenav-nav-link" (click)="showContextMenu($event)">
+                <a class="sidenav-nav-link" (click)="showContextMenu()">
                     <i class="sidenav-link-icon" [class]="data.icon"></i>
                     <span class="sidenav-link-text" *ngIf="!isCollapsed">{{data.label}}</span>
                 </a>
@@ -27,9 +27,10 @@
 
     <div class="custom-context-menu" *ngIf="isContextMenuOpen">
         <nav>
-            <a *ngFor="let items of contextMenuData" class="context-menu-link">
-                <i class="sidenav-link-icon" [class]="items.icon"></i>
-                <span class="sidenav-link-text" *ngIf="!isCollapsed">{{items.label}}</span>
+            <a *ngFor="let item of contextMenuData" class="context-menu-link"
+                (click)="item.label == 'Logout' ? logout() : null">
+                <i class="sidenav-link-icon" [class]="item.icon"></i>
+                <span class="sidenav-link-text" *ngIf="!isCollapsed">{{item.label}}</span>
             </a>
         </nav>
     </div>
