@@ -21,8 +21,6 @@ const envConfigFile = `export const environment = {
 };`;
 fs.writeFileSync(targetPath, envConfigFile, 'utf8');
 console.log('Wrote variables to environment.ts');
-console.log(process.env['PRODUCTION'])
-
 
 const targetDir2 = './dist';
 const targetPath2 = path.join(targetDir, '_redirects');
