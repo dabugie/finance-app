@@ -15,15 +15,14 @@
                 </a>
             </ng-container>
             <ng-template #notLastItem>
-                <a [routerLink]="[data.route]" class="sidenav-nav-link">
+                <a [routerLink]="[data.route]" class="sidenav-nav-link" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}">
                     <i class="sidenav-link-icon" [class]="data.icon"></i>
                     <span class="sidenav-link-text" *ngIf="!isCollapsed">{{data.label}}</span>
                 </a>
             </ng-template>
         </li>
     </div>
-    <!-- <p-contextMenu #cm [model]="contextMenuData" [appendTo]="sidenav" class="custom-context-menu"
-        [ngClass]="isCollapsed ? 'sidenav-collapsed' : ''"></p-contextMenu> -->
 
     <div class="custom-context-menu" *ngIf="isContextMenuOpen">
         <nav>
@@ -34,6 +33,4 @@
             </a>
         </nav>
     </div>
-
-    <!-- <div><h1>Hola</h1></div> -->
 </div>

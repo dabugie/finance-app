@@ -4,19 +4,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { AuthRoutingModule } from './auth-routing.module';
-import { LoginComponent } from './components/login/login.component';
+import { signinComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { authReducer } from './store/reducers';
+import { EffectsArray } from './store/auth.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent],
+  declarations: [signinComponent, SignupComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
     AuthRoutingModule,
     StoreModule.forFeature('auth', authReducer),
+    EffectsModule.forFeature(EffectsArray),
   ],
-  exports: [LoginComponent, SignupComponent],
+  exports: [signinComponent, SignupComponent],
 })
 export class AuthModule { }

@@ -3,57 +3,56 @@ import * as authActions from '../actions';
 import { User } from '../../models/user.model';
 import { AppState } from 'src/app/store/app-state.model';
 
-export interface authState {
-  id: string;
-  user: User | null;
-  loaded: boolean;
-  loading: boolean;
-  error: any;
+export interface AuthError {
+  url: string;
+  name: string;
+  message: string;
 }
 
-export interface AappStateWithAuth extends AppState {
-  auth: authState;
+export interface AuthState {
+  readonly uid: string;
+  readonly user: User | null;
+  readonly loaded: boolean;
+  readonly error: AuthError | null;
 }
 
-export const userInitialState: authState = {
-  id: '',
+export interface AppStateWithAuth extends AppState {
+  auth: AuthState;
+}
+
+export const initialAuthState: AuthState = {
+  uid: '',
   user: null,
   loaded: false,
-  loading: false,
   error: null,
 };
 
 export const authReducer = createReducer(
-  userInitialState,
-
-  on(authActions.setUserLoading, (state) => ({
-    ...state,
-    loading: true,
-  })),
+  initialAuthState,
 
   on(authActions.setUserSuccess, (state, { user }) => ({
     ...state,
-    loading: false,
     loaded: true,
     user: { ...user },
-    id: user.uid,
+    uid: user.uid,
     error: null,
   })),
 
-  on(authActions.setUserError, (state, { payload }) => ({
-    ...state,
-    loading: false,
-    loaded: false,
-    id: '',
-    user: null,
-    error: { url: payload.url, name: payload.name, message: payload.message },
-  })),
+  on(authActions.setUserError, (state, { payload }) => {
+    const { url, name, message } = payload;
+    return {
+      ...state,
+      loaded: false,
+      uid: '',
+      user: null,
+      error: { url, name, message },
+    };
+  }),
 
   on(authActions.unSetUser, (state) => ({
     ...state,
-    loading: false,
     loaded: false,
-    id: '',
+    uid: '',
     user: null,
     error: null,
   }))

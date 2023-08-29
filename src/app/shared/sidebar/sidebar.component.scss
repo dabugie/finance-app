@@ -38,7 +38,7 @@
       cursor: pointer;
       width: 2rem;
       height: 2rem;
-      border-radius: 50%;
+      border-radius: 0.5rem;
       background-color: transparent;
       border: none;
       .fa-xmark {
@@ -46,36 +46,18 @@
         font-size: 24px;
       }
     }
+
+    .btn-close:hover {
+      background-color: #f1f1f1;
+      .fa-xmark {
+        color: #000;
+      }
+    }
   }
 }
 
 .sidenav-collapsed {
   width: 5rem;
-
-  // ::ng-deep {
-  //   .custom-context-menu {
-  //     div {
-  //       left: 1rem !important;
-  //       top: 46rem !important;
-  //       width: 3rem;
-
-  //       @media (max-width: 768px) {
-  //         top: 77% !important;
-  //       }
-  //     }
-
-  //     .p-contextmenu
-  //       .p-element
-  //       .p-contextmenu-root-list
-  //       .p-menuitem
-  //       .p-menuitem-content
-  //       .p-element {
-  //       .p-menuitem-text {
-  //         display: none;
-  //       }
-  //     }
-  //   }
-  // }
 }
 
 .sidenav-nav {
@@ -116,7 +98,7 @@
 
   .sidenav-nav-item:hover {
     .sidenav-nav-link {
-      background-color: #fff;
+      background-color: #f1f1f1;
       color: #000;
     }
   }
@@ -132,6 +114,8 @@
 
   .sidenav-nav-item:last-child {
     margin-top: auto;
+    cursor: pointer;
+
   }
 }
 
@@ -172,7 +156,6 @@
       color: #f3f3f3;
       text-decoration: none;
       transition: all 0.3s ease;
-      // border-radius: 0.5rem;
 
       .sidenav-link-icon {
         font-size: 22px;
@@ -187,45 +170,10 @@
       }
     }
     a:hover {
-      background-color: #fff;
+      background-color: #f1f1f1;
       color: #000;
     }
   }
 }
 
-// :host ::ng-deep .custom-context-menu {
-//   div {
-//     left: 1rem !important;
-//     top: 46rem !important;
-//     z-index: 1001;
-//     width: 14rem;
-
-//     @media (max-width: 768px) {
-//       top: 40rem !important;
-//     }
-//   }
-
-//   .p-contextmenu {
-//     background: var(--blue-800);
-
-//     .p-element .p-contextmenu-root-list .p-menuitem {
-//       .p-menuitem-content {
-//         .p-element {
-//           span {
-//             color: #fff;
-//           }
-//         }
-//       }
-
-//       .p-menuitem-content:hover {
-//         background: #fff;
-//         color: #000;
-//         .p-element {
-//           span {
-//             color: #000;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
+// :host ::ng-deep .custom-context-menu {}

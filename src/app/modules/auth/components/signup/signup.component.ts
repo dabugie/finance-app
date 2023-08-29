@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../../store/auth.reducer';
 import * as authActions from '../../store/actions/auth.actions';
 import { Subscription } from 'rxjs';
+import { AppStateWithAuth } from '../../store/reducers';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +22,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private store: Store<AuthState>
+    private store: Store<AppStateWithAuth>
   ) { }
 
   ngOnInit(): void {
@@ -31,8 +32,8 @@ export class SignupComponent implements OnInit, OnDestroy {
       password: ['', Validators.required],
     });
 
-    this.uiSubscription = this.store.select('auth').subscribe((auth) => {
-      this.loading = auth.loading;
+    this.uiSubscription = this.store.select('ui').subscribe((ui) => {
+      this.loading = ui.isLoading;
     });
   }
 
@@ -45,17 +46,27 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.store.dispatch(authActions.setUserLoading());
 
     const { name, email, password } = this.signupForm.value;
 
-    this.authService
-      .createUser(name, email, password)
-      .then((credentials: any) => {
-        this.router.navigate(['/']);
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+    this.store.dispatch(authActions.setSignUp({ name, email, password }));
+
+
+    // this.authService
+    //   .createUser(name, email, password)
+    //   .then((credentials: any) => {
+    //     this.router.navigate(['/']);
+    //   })
+    //   .catch((err: any) => {
+    //     console.log(err);
+    //   });
+  }
+
+  signInWithGoogle() {
+    // this.store.dispatch(authActions.setUserLoading());
+
+    // this.authService.SigninWithGoogle().then(() => {
+    //   this.router.navigate(['/']);
+    // });
   }
 }
