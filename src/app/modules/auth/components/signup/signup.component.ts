@@ -1,11 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AuthState } from '../../store/auth.reducer';
-import * as authActions from '../../store/actions/auth.actions';
 import { Subscription } from 'rxjs';
+import * as authActions from '../../store/actions/auth.actions';
 import { AppStateWithAuth } from '../../store/reducers';
 
 @Component({
@@ -18,10 +15,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   uiSubscription: Subscription = new Subscription();
   loading: boolean = false;
 
+  error: boolean = false;
+  errorMessage: string = '';
+
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
     private store: Store<AppStateWithAuth>
   ) { }
 
@@ -32,8 +30,14 @@ export class SignupComponent implements OnInit, OnDestroy {
       password: ['', Validators.required],
     });
 
-    this.uiSubscription = this.store.select('ui').subscribe((ui) => {
+    this.uiSubscription = this.store.subscribe(({ ui, auth }: any) => {
       this.loading = ui.isLoading;
+
+      if (auth.error) {
+        const formattedError = this.formatFirebaseError(auth.error.message);
+        this.error = true;
+        this.errorMessage = formattedError || '';
+      }
     });
   }
 
@@ -46,27 +50,24 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     const { name, email, password } = this.signupForm.value;
 
     this.store.dispatch(authActions.setSignUp({ name, email, password }));
-
-
-    // this.authService
-    //   .createUser(name, email, password)
-    //   .then((credentials: any) => {
-    //     this.router.navigate(['/']);
-    //   })
-    //   .catch((err: any) => {
-    //     console.log(err);
-    //   });
   }
 
-  signInWithGoogle() {
-    // this.store.dispatch(authActions.setUserLoading());
+  signInWithGoogle() { }
 
-    // this.authService.SigninWithGoogle().then(() => {
-    //   this.router.navigate(['/']);
-    // });
+
+  formatFirebaseError(error: string): string {
+    const splitError = error.split('/');
+    if (splitError.length === 2) {
+      let formattedError = splitError[1].replace(/-/g, ' ');
+      formattedError = formattedError.replace(/[.).]/g, '');
+      return formattedError;
+    }
+    return error;
   }
 }
+
+
+

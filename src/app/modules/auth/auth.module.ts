@@ -9,6 +9,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { authReducer } from './store/reducers';
 import { EffectsArray } from './store/auth.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { PrimeNgModule } from 'src/app/shared/prime-ng.module';
 
 @NgModule({
   declarations: [signinComponent, SignupComponent],
@@ -17,7 +18,8 @@ import { EffectsModule } from '@ngrx/effects';
     ReactiveFormsModule,
     RouterModule,
     AuthRoutingModule,
-    StoreModule.forFeature('auth', authReducer),
+    // StoreModule.forFeature('auth', authReducer),
+    PrimeNgModule,
     EffectsModule.forFeature(EffectsArray),
   ],
   exports: [signinComponent, SignupComponent],

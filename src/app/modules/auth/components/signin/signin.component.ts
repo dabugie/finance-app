@@ -1,9 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
 import * as authActions from '../../store/actions/auth.actions';
 import { AppStateWithAuth } from '../../store/reducers/auth.reducer';
 
@@ -16,23 +14,12 @@ export class signinComponent implements OnInit, OnDestroy {
   signinForm: FormGroup = new FormGroup({});
   loading: boolean = false;
   uiSubscription: Subscription = new Subscription();
-
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event:any) {
-
-    console.log({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-  }
+  error: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
     private store: Store<AppStateWithAuth>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.signinForm = this.fb.group({
@@ -40,9 +27,11 @@ export class signinComponent implements OnInit, OnDestroy {
       password: ['', Validators.required],
     });
 
-    this.uiSubscription = this.store.select('ui').subscribe((ui) => {
+    this.uiSubscription = this.store.subscribe(({ ui, auth }) => {
       this.loading = ui.isLoading;
+      this.error = auth.error?.message ? true : false;
     });
+
   }
 
   ngOnDestroy(): void {
@@ -50,6 +39,9 @@ export class signinComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+
+    this.error = false;
+
     if (this.signinForm.invalid) {
       return;
     }

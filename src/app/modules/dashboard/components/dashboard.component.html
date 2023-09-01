@@ -1,6 +1,20 @@
-<div class="dashboard">
-    <div class="dashboard-content">
-        <app-sidebar (onToggleSidenav)="onToggleSideNav($event)"></app-sidebar>
-        <app-main-content [isCollapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-main-content>
+<div class="dashboard flex flex-col h-screen">
+    <!-- Topbar fijo en la parte superior de la página -->
+    <div class="fixed top-0 left-0 right-0 z-50">
+        <app-topbar></app-topbar>
+    </div>
+
+    <div class="flex flex-grow">
+        <div class="hidden md:block">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="flex-grow">
+            <app-main-content></app-main-content>
+        </div>
+    </div>
+
+    <!-- Navbar que aparece en pantallas menores a 'md' -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50">
+        <app-bottom-bar></app-bottom-bar>
     </div>
 </div>

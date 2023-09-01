@@ -1,0 +1,38 @@
+::ng-deep {
+  p-dropdown .p-dropdown {
+    @apply bg-gray-100 hover:border-gray-200 enabled:hover:border-gray-300 enabled:focus:border-purple-200 enabled:focus:bg-gray-50;
+
+    &:not(.p-disabled):hover {
+      @apply border-gray-200;
+    }
+
+    .p-dropdown-label,
+    .p-dropdown-trigger {
+      padding: 0 !important;
+      @apply text-gray-400 text-sm #{!important};
+    }
+
+    p-overlay {
+      .p-component {
+        @apply shadow-none border-gray-300 border rounded-lg;
+        .p-overlay-content {
+          .p-dropdown-panel {
+            .p-dropdown-items-wrapper {
+              @apply p-2;
+              ul {
+                p-dropdownitem {
+                  li {
+                    @apply p-3 text-gray-400 text-sm rounded-lg;
+                    &:hover {
+                      @apply bg-gray-200;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

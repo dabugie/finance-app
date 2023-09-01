@@ -47,9 +47,11 @@ export class AuthService implements OnDestroy {
         next: async (fbUser) => {
           if (fbUser) {
             this.userUnsubscribe = onSnapshot(
-              doc(this.firestore, fbUser.uid, 'user'),
+              doc(this.firestore,  'users',fbUser.uid),
               {
                 next: (doc) => {
+                  console.log(doc.data());
+                  
                   const user = User.fromFirebase(doc.data());
                   this._user = user;
                   this.store.dispatch(authActions.setUserSuccess({ user }));
@@ -94,8 +96,8 @@ export class AuthService implements OnDestroy {
       password
     );
     const newUser = new User(user.uid, name, user.email!);
-    const userRef = collection(this.firestore, user.uid);
-    await setDoc(doc(userRef, 'user'), { ...newUser });
+    const userRef = collection(this.firestore, 'users');
+    await setDoc(doc(userRef, user.uid), { ...newUser });
     return newUser;
   }
 
