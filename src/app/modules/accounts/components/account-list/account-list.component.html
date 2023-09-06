@@ -1,0 +1,6 @@
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div class="bg-white p-4 rounded shadow" *ngFor="let account of accounts">
+        <h2 class="text-xl font-bold mt-4">{{account.accountName}}</h2>
+        <p class="text-gray-600 mt-2">{{account.accountNotes}}</p>
+    </div>
+</div>

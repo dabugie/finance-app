@@ -1,13 +1,16 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  NgZone,
+  OnDestroy,
+  OnInit
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { CreateAccountComponent } from '../create-account/create-account.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { Subscription, filter } from 'rxjs';
+import { AppStateWithAuth } from 'src/app/modules/auth/store/reducers';
+import { AccountService } from '../../services/account.service';
+import * as accountActions from '../../store/actions/accounts.actions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Default,
@@ -15,41 +18,31 @@ import { CreateAccountComponent } from '../create-account/create-account.compone
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss'],
 })
-export class AccountsComponent implements AfterViewInit {
-  ref: DynamicDialogRef | undefined;
-
+export class AccountsComponent implements OnInit, OnDestroy {
   isDialogVisible: boolean = false;
+
+  userSubs: Subscription = new Subscription();
+  accountsSubs: Subscription = new Subscription();
 
   constructor(
     public dialogService: DialogService,
     public messageService: MessageService,
-    private cdRef: ChangeDetectorRef,
-    private zone: NgZone
+    private accountService: AccountService,
+    private store: Store<AppStateWithAuth>,
   ) { }
 
   ngOnInit(): void {
-    if (this.ref) {
-      this.ref.close();
-    }
-  }
-
-  ngAfterViewInit(): void {
-    this.cdRef.detectChanges();
-  }
-
-  show() {
-    this.zone.run(() => {
-      this.ref = this.dialogService.open(CreateAccountComponent, {
-        header: 'Create a new account',
-        width: '350px',
-        contentStyle: {
-          overflow: 'auto',
-          'box-shadow': '0px 0px 0px 0px transparent',
-        },
-        baseZIndex: 10000,
-        maximizable: false,
-        styleClass: 'shadow-none widthCustom md:w-1/3 md:max-w-md',
+    this.userSubs = this.store.select('auth')
+      .pipe(filter(({ user }) => user != null))
+      .subscribe(({ user }) => {
+        this.accountsSubs = this.accountService.getAccounts(user!.uid).subscribe((accounts: any) => {
+          this.store.dispatch(accountActions.setAccountsSuccess({ accounts }));
+        })
       });
-    });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubs?.unsubscribe();
+    this.accountsSubs?.unsubscribe();
   }
 }

@@ -11,9 +11,12 @@
             </div>
         </div>
     </div>
+    <div class="p-4">
+        <app-account-list></app-account-list>
+    </div>
 </div>
 
 <p-dialog header="Create new account" [(visible)]="isDialogVisible" [modal]="true" [style]="{ width: '350px', 'box-shadow': '0px 0px 0px 0px transparent' }" [draggable]="false"
     [resizable]="false">
-    <app-create-account></app-create-account>
+    <app-create-account (closeModal)="isDialogVisible = !$event"></app-create-account>
 </p-dialog> 

@@ -20,12 +20,18 @@
                         formControlName="accountNumber" />
                 </div>
                 <div class="form-group mb-4 w-full">
-                    <input type="text" pInputText class="form-control" placeholder="Enter the account curency"
+                    <!-- <input type="text" pInputText class="form-control" placeholder="Enter the account curency"
                         class="w-full p-3 rounded-lg text-sm bg-gray-100 border-gray-200 hover:border-gray-200 enabled:hover:border-gray-300 enabled:focus:border-purple-200 enabled:focus:bg-gray-50"
-                        formControlName="accountCurrency" />
+                        formControlName="accountCurrency" /> -->
+                    <p-dropdown [options]="accountCurrencies" formControlName="accountCurrency" [filter]="true" filterBy="code" [showClear]="true"
+                        placeholder="Select a currency"
+                        styleClass="w-full p-3 flex items-center justify-center text-sm border-gray-200 rounded-lg"
+                        optionLabel="code">
+                    </p-dropdown>
                 </div>
                 <div class="form-group mb-4 w-full">
-                    <textarea rows="5" cols="31" pInputTextarea formControlName="accountNotes" placeholder="Enter the account description"
+                    <textarea rows="5" cols="31" pInputTextarea formControlName="accountNotes"
+                        placeholder="Enter the account description"
                         class="w-full p-3 rounded-lg text-sm bg-gray-100 border-gray-200 hover:border-gray-200 enabled:hover:border-gray-300 enabled:focus:border-purple-200 enabled:focus:bg-gray-50"></textarea>
                 </div>
 

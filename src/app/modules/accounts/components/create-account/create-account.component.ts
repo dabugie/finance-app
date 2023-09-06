@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
+import { currencies } from 'src/app/shared/currencies';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -9,6 +10,7 @@ import { AccountService } from '../../services/account.service';
   styleUrls: ['./create-account.component.scss'],
 })
 export class CreateAccountComponent {
+  @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>(false);
   accountsForm: FormGroup = new FormGroup({});
 
   accountTypes: any[] = [
@@ -20,6 +22,8 @@ export class CreateAccountComponent {
     { name: 'Loan', code: 'LOAN' },
     { name: 'Other', code: 'OTHER' },
   ];
+
+  accountCurrencies: { code: string, country: string }[] = currencies;
 
   constructor(
     private fb: FormBuilder,
@@ -40,10 +44,19 @@ export class CreateAccountComponent {
   }
 
   onSubmit() {
+
+    const account = {
+      ...this.accountsForm.value,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+
     this.accountService
-      .createAccount(this.accountsForm.value)
+      .createAccount(account)
       .then((account) => {
         console.log(account);
+
+        this.closeModal.emit(true);
       });
   }
 }
