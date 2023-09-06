@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore';
 import { AuthService } from '../../auth/services';
 import { Account } from '../models/account.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,10 @@ import { Account } from '../models/account.model';
 export class AccountService {
   private _account!: Account;
 
-  constructor(private firestore: Firestore, private authService: AuthService) {}
+  constructor(
+    private firestore: Firestore,
+    private authService: AuthService
+  ) { }
 
   async createAccount(account: Account) {
     const { uid } = this.authService?.user;
@@ -21,5 +25,9 @@ export class AccountService {
     this._account = { ...account };
 
     return this._account;
+  }
+
+  getCurrencies() {
+    
   }
 }

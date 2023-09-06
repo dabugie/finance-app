@@ -11,14 +11,13 @@ export const setSignUp = createAction(
   props<{ name: string, email: string; password: string }>()
 );
 
-export const setUserSuccess = createAction(
-  '[Auth] Load User Success',
-  props<{ user: User }>()
-);
+export const setLoading = createAction('[Auth] Set Loading');
 
-export const setUserError = createAction(
-  '[Auth] Load User Error',
-  props<{ payload: any }>()
-);
+export const unsetLoading = createAction('[Auth] Unset Loading');
+
+export const authSuccess = createAction('[Auth] Auth Success', props<{ user: User }>());
+
+export const authError = createAction('[Auth] Auth Error', props<{ payload: any }>());
 
 export const unSetUser = createAction('[Auth] Unset User');
+

@@ -18,12 +18,14 @@ import { CreateAccountComponent } from '../create-account/create-account.compone
 export class AccountsComponent implements AfterViewInit {
   ref: DynamicDialogRef | undefined;
 
+  isDialogVisible: boolean = false;
+
   constructor(
     public dialogService: DialogService,
     public messageService: MessageService,
     private cdRef: ChangeDetectorRef,
     private zone: NgZone
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.ref) {

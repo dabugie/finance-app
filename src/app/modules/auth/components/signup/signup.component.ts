@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as authActions from '../../store/actions/auth.actions';
 import { AppStateWithAuth } from '../../store/reducers';
+import { AuthService } from '../../services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -18,9 +20,15 @@ export class SignupComponent implements OnInit, OnDestroy {
   error: boolean = false;
   errorMessage: string = '';
 
+  isAuthenticated: boolean = false;
+
+
   constructor(
     private fb: FormBuilder,
-    private store: Store<AppStateWithAuth>
+    private store: Store<AppStateWithAuth>,
+    private authService: AuthService,
+    private router: Router,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
@@ -30,8 +38,15 @@ export class SignupComponent implements OnInit, OnDestroy {
       password: ['', Validators.required],
     });
 
-    this.uiSubscription = this.store.subscribe(({ ui, auth }: any) => {
-      this.loading = ui.isLoading;
+    this.uiSubscription = this.store.subscribe(({ auth }: any) => {
+      this.loading = auth.isLoading;
+      this.error = auth.error?.message ? true : false;
+      this.isAuthenticated = auth.isAuthenticated ? true : false;
+      if (this.isAuthenticated) {
+        this.ngZone.run(() => {
+          this.router.navigate(['/']);
+        });
+      }
 
       if (auth.error) {
         const formattedError = this.formatFirebaseError(auth.error.message);
@@ -46,17 +61,27 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+
+    this.error = false;
+    this.errorMessage = '';
+
     if (this.signupForm.invalid) {
       return;
     }
 
     const { name, email, password } = this.signupForm.value;
 
-    this.store.dispatch(authActions.setSignUp({ name, email, password }));
+    this.store.dispatch(authActions.setLoading());
+
+    this.authService
+      .signupUser(name, email, password)
+      .then(() => { })
+      .catch((error) => {
+        this.store.dispatch(authActions.authError({ payload: error }));
+      });
   }
 
   signInWithGoogle() { }
-
 
   formatFirebaseError(error: string): string {
     const splitError = error.split('/');
@@ -68,6 +93,3 @@ export class SignupComponent implements OnInit, OnDestroy {
     return error;
   }
 }
-
-
-

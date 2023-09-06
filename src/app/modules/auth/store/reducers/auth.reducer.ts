@@ -10,9 +10,9 @@ export interface AuthError {
 }
 
 export interface AuthState {
-  readonly uid: string;
+  readonly isAuthenticated: boolean;
   readonly user: User | null;
-  readonly loaded: boolean;
+  readonly isLoading: boolean;
   readonly error: AuthError | null;
 }
 
@@ -21,39 +21,43 @@ export interface AppStateWithAuth extends AppState {
 }
 
 export const initialAuthState: AuthState = {
-  uid: '',
+  isAuthenticated: false,
   user: null,
-  loaded: false,
+  isLoading: false,
   error: null,
 };
 
 export const authReducer = createReducer(
   initialAuthState,
 
-  on(authActions.setUserSuccess, (state, { user }) => ({
+  on(authActions.setLoading, (state) => ({ ...state, isLoading: true, error: null })),
+
+  on(authActions.unsetLoading, (state) => ({ ...state, isLoading: false })),
+
+  on(authActions.authSuccess, (state, { user }) => ({
     ...state,
-    loaded: true,
-    user: { ...user },
-    uid: user.uid,
-    error: null,
+    isAuthenticated: true,
+    user: User.fromFirebase({ ...user }),
+    isLoading: false,
+    error: null
   })),
 
-  on(authActions.setUserError, (state, { payload }) => {
+  on(authActions.authError, (state, { payload }) => {
     const { url, name, message } = payload;
     return {
       ...state,
-      loaded: false,
-      uid: '',
+      isAuthenticated: false,
       user: null,
+      isLoading: false,
       error: { url, name, message },
     };
   }),
 
   on(authActions.unSetUser, (state) => ({
     ...state,
-    loaded: false,
-    uid: '',
+    isAuthenticated: false,
     user: null,
+    isLoading: false,
     error: null,
   }))
 );

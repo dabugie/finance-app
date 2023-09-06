@@ -5,6 +5,7 @@ import {
   Unsubscribe,
   authState,
   createUserWithEmailAndPassword,
+  getAdditionalUserInfo,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from '@angular/fire/auth';
@@ -12,16 +13,17 @@ import {
   Firestore,
   collection,
   doc,
+  getDoc,
   onSnapshot,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
-import { User } from '../models/user.model';
-import { Subject, map, takeUntil } from 'rxjs';
-import { AuthState } from '../store/auth.reducer';
-import { Store } from '@ngrx/store';
-import * as authActions from '../store/actions/auth.actions';
 import { Router } from '@angular/router';
-import * as uiActions from 'src/app/store/actions/ui.actions';
+import { Store } from '@ngrx/store';
+import { Subject, map, takeUntil } from 'rxjs';
+import { User } from '../models/user.model';
+import * as authActions from '../store/actions/auth.actions';
+import { AuthState } from '../store/auth.reducer';
 
 @Injectable({
   providedIn: 'root',
@@ -39,97 +41,129 @@ export class AuthService implements OnDestroy {
     public router: Router
   ) { }
 
-  initAuthListener(): void {
-    this.store.dispatch(uiActions.setLoading());
-    authState(this.auth)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: async (fbUser) => {
-          if (fbUser) {
-            this.userUnsubscribe = onSnapshot(
-              doc(this.firestore,  'users',fbUser.uid),
-              {
-                next: (doc) => {
-                  console.log(doc.data());
-                  
-                  const user = User.fromFirebase(doc.data());
-                  this._user = user;
-                  this.store.dispatch(authActions.setUserSuccess({ user }));
-                  this.store.dispatch(uiActions.unsetLoading());
-                },
-                error: (error) => {
-                  this.store.dispatch(
-                    authActions.setUserError({ payload: error })
-                  );
-                  this.store.dispatch(uiActions.unsetLoading());
-                },
-              }
-            );
-          } else {
-            this._user = null!;
-            this.userUnsubscribe?.();
-            this.store.dispatch(authActions.unSetUser());
-            this.store.dispatch(uiActions.unsetLoading());
-          }
-        },
-        error: (error) => {
-          this.store.dispatch(authActions.setUserError({ payload: error }));
-          this.store.dispatch(uiActions.unsetLoading());
-        },
-      });
-  }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.userUnsubscribe?.();
   }
 
-  get user() {
-    return { ...this._user };
+  initAuthListener(): void {
+    authState(this.auth)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (fbUser) => this.handleAuthStateChange(fbUser),
+        error: (error) => this.handleError(error),
+      });
   }
 
-  async signup({ name, email, password }: any) {
-    const { user } = await createUserWithEmailAndPassword(
-      this.auth,
-      email,
-      password
+  private handleAuthStateChange(fbUser: any): void {
+    if (fbUser) {
+      this.handleAuthenticatedUser(fbUser);
+    } else {
+      this.handleUnauthenticatedUser();
+    }
+  }
+
+  private handleAuthenticatedUser(fbUser: any): void {
+    this.userUnsubscribe = onSnapshot(
+      doc(this.firestore, 'users', fbUser.uid),
+      {
+        next: (doc: any) => {
+          const user = User.fromFirebase(doc.data());
+          this._user = user;
+          this.store.dispatch(authActions.authSuccess({ user }));
+        },
+        error: (error) => this.handleError(error),
+      }
     );
-    const newUser = new User(user.uid, name, user.email!);
+  }
+
+  private handleUnauthenticatedUser(): void {
+    this._user = null!;
+    this.userUnsubscribe?.();
+    this.store.dispatch(authActions.unSetUser());
+  }
+
+  private handleError(error: any): void {
+    this.store.dispatch(authActions.authError({ payload: error }));
+  }
+
+  private async createOrUpdateUserInFirestore(user: any, data: any) {
     const userRef = collection(this.firestore, 'users');
-    await setDoc(doc(userRef, user.uid), { ...newUser });
-    return newUser;
+    const docRef = doc(userRef, user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      await setDoc(docRef, { ...data });
+    } else {
+      await updateDoc(docRef, { photoURL: data.photoURL });
+    }
   }
 
-  signinUser(email: string, password: string) {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  async signupUser(name: string, email: string, password: string) {
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+
+      const newUser = new User(
+        user.uid,
+        name,
+        user.email!,
+        new Date(),
+        new Date(),
+        null!
+      );
+
+      await this.createOrUpdateUserInFirestore(user, newUser);
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
-  logoutUser() {
-    return this.auth.signOut();
+  async signinUser(email: string, password: string) {
+    try {
+      await signInWithEmailAndPassword(this.auth, email, password);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async signinUserWithGoogle() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(this.auth, provider);
+
+      const newUser = new User(
+        user.uid,
+        user.displayName!,
+        user.email!,
+        new Date(),
+        new Date(),
+        user.photoURL!
+      );
+
+      await this.createOrUpdateUserInFirestore(user, newUser);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async signoutUser() {
+    try {
+      await this.auth.signOut();
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   isAuth() {
     return authState(this.auth).pipe(map((fbUser) => fbUser != null));
   }
 
-  async OAuthProvider(provider: any) {
-    try {
-      await signInWithPopup(this.auth, provider);
-      this.ngZone.run(() => {
-        this.router.navigate(['']);
-      });
-    } catch (error) {
-      window.alert(error);
-    }
-  }
-
-  async SigninWithGoogle() {
-    try {
-      await this.OAuthProvider(new GoogleAuthProvider());
-      console.log('Successfully logged in!');
-    } catch (error) {
-      console.log(error);
-    }
+  get user() {
+    return { ...this._user };
   }
 }
